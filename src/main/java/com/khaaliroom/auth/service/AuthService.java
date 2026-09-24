@@ -1,5 +1,6 @@
 package com.khaaliroom.auth.service;
 
+import com.khaaliroom.auth.client.UserServiceClient;
 import com.khaaliroom.auth.dto.LoginRequest;
 import com.khaaliroom.auth.dto.LoginResponse;
 import com.khaaliroom.auth.dto.SignupRequest;
@@ -27,6 +28,7 @@ public class AuthService {
     private final JwtService jwtService;
     private final RefreshTokenService refreshTokenService;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final UserServiceClient userServiceClient;
 
     public UserResponse signup(SignupRequest request) {
 
@@ -56,6 +58,7 @@ public class AuthService {
                 .build();
 
         User savedUser = userRepository.save(user);
+        userServiceClient.createProfile(savedUser.getId());
 
         return new UserResponse(
                 savedUser.getId(),
