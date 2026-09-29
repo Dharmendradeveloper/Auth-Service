@@ -42,8 +42,12 @@ public class SecurityConfig {
                                 "/api/v1/auth/login",
                                 "/api/v1/auth/refresh",
                                 "/api/v1/auth/logout",
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",
                                 "/actuator/health/**"
                         ).permitAll()
+
                         .anyRequest().authenticated()
                 )
 
@@ -52,6 +56,13 @@ public class SecurityConfig {
                                 new HttpStatusEntryPoint(
                                         HttpStatus.UNAUTHORIZED
                                 )
+                        )
+                        .accessDeniedHandler(
+                                (request, response, accessDeniedException) ->
+                                        response.sendError(
+                                                HttpStatus.FORBIDDEN.value(),
+                                                "Forbidden"
+                                        )
                         )
                 )
 
